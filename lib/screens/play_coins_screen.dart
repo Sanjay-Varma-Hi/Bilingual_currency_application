@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'name_coin_game_screen.dart';
+import 'value_coin_game_screen.dart';
+import 'conversion_game_screen.dart';
 
 class PlayCoinsScreen extends StatelessWidget {
   const PlayCoinsScreen({super.key});
@@ -26,47 +29,39 @@ class PlayCoinsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildGameButton('Name the Coin', () {
-                    // Add navigation or game logic
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const NameCoinGameScreen()),
+                    );
                   }),
                   const SizedBox(height: 20),
                   _buildGameButton('Value of the Coin', () {
-                    // Add navigation or game logic
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ValueCoinGameScreen()),
+                    );
                   }),
                   const SizedBox(height: 20),
                   _buildGameButton('Coin value conversion', () {
-                    // Add navigation or game logic
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ConversionGameScreen()),
+                    );
                   }),
                 ],
               ),
               const Spacer(flex: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {},
-                    color: Colors.black,
-                    iconSize: 30,
+              Center(
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.home,
+                    size: 40,
+                    color: Colors.green,
                   ),
-                  const SizedBox(width: 20),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.home,
-                      size: 40,
-                      color: Colors.green,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const SizedBox(width: 20),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_forward_ios),
-                    onPressed: () {},
-                    color: Colors.black,
-                    iconSize: 30,
-                  ),
-                ],
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
               const SizedBox(height: 20),
             ],

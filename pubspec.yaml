@@ -91,3 +91,17 @@ flutter:
 
   assets:
     - assets/
+    - assets/one_front.png
+    - assets/one_back.png
+    - assets/two_front.png
+    - assets/two_back.png
+    - assets/five_front.png
+    - assets/five_back.png
+    - assets/ten_front.png
+    - assets/ten_back.png
+    - assets/twenty_front.png
+    - assets/twenty_back.png
+    - assets/fifty_front.png
+    - assets/fifty_back.png
+    - assets/hundred_front.png
+    - assets/hundred_back.png
