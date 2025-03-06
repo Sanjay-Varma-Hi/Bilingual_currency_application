@@ -91,6 +91,10 @@ flutter:
 
   assets:
     - assets/
+    - assets/cent_front.png
+    - assets/nickel_front.png
+    - assets/dime_front.png
+    - assets/quarter_front.png
     - assets/one_front.png
     - assets/one_back.png
     - assets/two_front.png

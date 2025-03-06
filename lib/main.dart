@@ -25,8 +25,29 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class CurrencyChampionsHome extends StatelessWidget {
+class CurrencyChampionsHome extends StatefulWidget {
   const CurrencyChampionsHome({super.key});
+
+  @override
+  State<CurrencyChampionsHome> createState() => _CurrencyChampionsHomeState();
+}
+
+class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
+  bool isSpanish = false;
+
+  final Map<String, String> translations = {
+    'Currency Champions': 'Campeones de la Moneda',
+    'Learn about Coins': 'Aprende sobre Monedas',
+    'Learn about Bills': 'Aprende sobre Billetes',
+    'Play with Coins': 'Juega con Monedas',
+    'Play with Bills': 'Juega con Billetes',
+    'Take Quiz': 'Tomar Prueba',
+  };
+
+  String translate(String text) {
+    if (!isSpanish) return text;
+    return translations[text] ?? text;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,109 +55,129 @@ class CurrencyChampionsHome extends StatelessWidget {
     final bool isTablet = screenSize.width > 600;
 
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: SafeArea(
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              const Text(
-                'Currency Champions',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontFamily: 'serif',
-                  color: Color(0xFFB54B3C),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 40),
-              Expanded(
-                child: Center(
-                  child: SizedBox(
-                    width: isTablet ? 600 : screenSize.width * 0.9,
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Stack(
+        children: [
+          Container(
+            color: Colors.white,
+            child: SafeArea(
+              child: Column(
+                children: [
+                  const SizedBox(height: 40),
+                  Text(
+                    translate('Currency Champions'),
+                    style: const TextStyle(
+                      fontSize: 40,
+                      fontFamily: 'serif',
+                      color: Color(0xFFB54B3C),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  Expanded(
+                    child: Center(
+                      child: SizedBox(
+                        width: isTablet ? 600 : screenSize.width * 0.9,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              _buildMenuButton(
-                                'Learn about Coins',
-                                Colors.lightGreen[100]!,
-                                () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const LearnCoinsScreen()),
-                                ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _buildMenuButton(
+                                    translate('Learn about Coins'),
+                                    Colors.lightGreen[100]!,
+                                    () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const LearnCoinsScreen()),
+                                    ),
+                                  ),
+                                  _buildMenuButton(
+                                    translate('Learn about Bills'),
+                                    Colors.lightGreen[100]!,
+                                    () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const LearnBillsScreen()),
+                                    ),
+                                  ),
+                                ],
                               ),
+                              const SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _buildMenuButton(
+                                    translate('Play with Coins'),
+                                    Colors.lightGreen[100]!,
+                                    () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const PlayCoinsScreen()),
+                                    ),
+                                  ),
+                                  _buildMenuButton(
+                                    translate('Play with Bills'),
+                                    Colors.lightGreen[100]!,
+                                    () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const PlayBillsScreen()),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 20),
                               _buildMenuButton(
-                                'Learn about Bills',
-                                Colors.lightGreen[100]!,
+                                translate('Take Quiz'),
+                                const Color(0xFFE6C5B9),
                                 () => Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const LearnBillsScreen()),
+                                  MaterialPageRoute(builder: (context) => const QuizScreen()),
+                                ),
+                                width: 200,
+                              ),
+                              const SizedBox(height: 40),
+                              SizedBox(
+                                height: 250,
+                                width: double.infinity,
+                                child: Image.asset(
+                                  'assets/home1.png',
+                                  fit: BoxFit.contain,
+                                  scale: 0.8,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(
+                                      Icons.image,
+                                      size: 50,
+                                      color: Colors.grey,
+                                    );
+                                  },
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildMenuButton(
-                                'Play with Coins',
-                                Colors.lightGreen[100]!,
-                                () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const PlayCoinsScreen()),
-                                ),
-                              ),
-                              _buildMenuButton(
-                                'Play with Bills',
-                                Colors.lightGreen[100]!,
-                                () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const PlayBillsScreen()),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          _buildMenuButton(
-                            'Take Quiz',
-                            Color(0xFFE6C5B9),
-                            () => Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const QuizScreen()),
-                            ),
-                            width: 200,
-                          ),
-                          const SizedBox(height: 40),
-                          SizedBox(
-                            height: 250,
-                            width: double.infinity,
-                            child: Image.asset(
-                              'assets/home1.png',
-                              fit: BoxFit.contain,
-                              scale: 0.8,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(
-                                  Icons.image,
-                                  size: 50,
-                                  color: Colors.grey,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            top: 40,
+            right: 16,
+            child: IconButton(
+              icon: const Icon(
+                Icons.translate,
+                size: 30,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                setState(() {
+                  isSpanish = !isSpanish;
+                });
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

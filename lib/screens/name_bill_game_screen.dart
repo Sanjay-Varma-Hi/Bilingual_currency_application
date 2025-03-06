@@ -12,6 +12,7 @@ class _NameBillGameScreenState extends State<NameBillGameScreen> {
   bool showFeedback = false;
   bool? isCorrect;
   String feedback = '';
+  bool isSpanish = false;
 
   final List<Map<String, dynamic>> questions = [
     {
@@ -52,126 +53,171 @@ class _NameBillGameScreenState extends State<NameBillGameScreen> {
     },
   ];
 
+  final Map<String, String> translations = {
+    'Name the Bill': 'Nombra el Billete',
+    'Question': 'Pregunta',
+    'Choose the correct answer': 'Elige la respuesta correcta',
+    'Correct!': '¡Correcto!',
+    'Try again!': '¡Inténtalo de nuevo!',
+    'Next': 'Siguiente',
+    'Prev': 'Anterior',
+    'One Dollar': 'Un Dólar',
+    'Two Dollars': 'Dos Dólares',
+    'Five Dollars': 'Cinco Dólares',
+    'Ten Dollars': 'Diez Dólares',
+    'Twenty Dollars': 'Veinte Dólares',
+    'Fifty Dollars': 'Cincuenta Dólares',
+    'Hundred Dollars': 'Cien Dólares',
+    'Fun fact: The \$1 bill features George Washington and makes up about 45% of all US currency printing!':
+    '¡Dato curioso: El billete de \$1 presenta a George Washington y constituye aproximadamente el 45% de toda la impresión de moneda estadounidense!',
+    // Add other fun fact translations
+  };
+
+  String translate(String text) {
+    if (!isSpanish) return text;
+    return translations[text] ?? text;
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentQ = questions[currentQuestion - 1];
 
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 40),
-              const Text(
-                'Name the Bill',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFB54B3C),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Question $currentQuestion',
-                style: const TextStyle(
-                  fontSize: 24,
-                  color: Colors.brown,
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Choose the correct answer',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(height: 30),
-              Image.asset(
-                currentQ['image'],
-                height: 150,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(
-                    Icons.attach_money,
-                    size: 150,
-                    color: Colors.grey,
-                  );
-                },
-              ),
-              const SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Stack(
+        children: [
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Column(
                 children: [
-                  _buildAnswerButton(
-                    currentQ['options'][0],
-                    currentQ['options'][0] == currentQ['correctAnswer'],
-                    currentQ['fact'],
-                  ),
-                  _buildAnswerButton(
-                    currentQ['options'][1],
-                    currentQ['options'][1] == currentQ['correctAnswer'],
-                    currentQ['fact'],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              if (showFeedback)
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: isCorrect! ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    feedback,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: isCorrect! ? Colors.green : Colors.red,
+                  const SizedBox(height: 40),
+                  Text(
+                    translate('Name the Bill'),
+                    style: const TextStyle(
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
+                      color: Color(0xFFB54B3C),
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (currentQuestion > 1)
-                    _buildNavButton('Prev', () {
-                      setState(() {
-                        currentQuestion--;
-                        showFeedback = false;
-                      });
-                    }),
-                  const SizedBox(width: 20),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.home,
-                      size: 40,
-                      color: Colors.green,
+                  const SizedBox(height: 20),
+                  Text(
+                    translate('Question') + ' $currentQuestion',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.brown,
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    translate('Choose the correct answer'),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Image.asset(
+                    currentQ['image'],
+                    height: 150,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.attach_money,
+                        size: 150,
+                        color: Colors.grey,
+                      );
                     },
                   ),
-                  const SizedBox(width: 20),
-                  if (currentQuestion < questions.length)
-                    _buildNavButton('Next', () {
-                      setState(() {
-                        currentQuestion++;
-                        showFeedback = false;
-                      });
-                    }),
+                  const SizedBox(height: 40),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildAnswerButton(
+                        currentQ['options'][0],
+                        currentQ['options'][0] == currentQ['correctAnswer'],
+                        currentQ['fact'],
+                      ),
+                      _buildAnswerButton(
+                        currentQ['options'][1],
+                        currentQ['options'][1] == currentQ['correctAnswer'],
+                        currentQ['fact'],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  if (showFeedback)
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        color: isCorrect! ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        feedback,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isCorrect! ? Colors.green : Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (currentQuestion > 1)
+                        _buildNavButton('Prev', () {
+                          setState(() {
+                            currentQuestion--;
+                            showFeedback = false;
+                          });
+                        }),
+                      const SizedBox(width: 20),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.home,
+                          size: 40,
+                          color: Colors.green,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      const SizedBox(width: 20),
+                      if (currentQuestion < questions.length)
+                        _buildNavButton('Next', () {
+                          setState(() {
+                            currentQuestion++;
+                            showFeedback = false;
+                          });
+                        }),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
-              const SizedBox(height: 20),
-            ],
+            ),
           ),
-        ),
+          Positioned(
+            top: 40,
+            right: 16,
+            child: IconButton(
+              icon: const Icon(
+                Icons.translate,
+                size: 30,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                setState(() {
+                  isSpanish = !isSpanish;
+                });
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -187,7 +233,7 @@ class _NameBillGameScreenState extends State<NameBillGameScreen> {
         ),
       ),
       child: Text(
-        text,
+        translate(text),
         style: const TextStyle(
           fontSize: 16,
           color: Colors.black87,
@@ -206,9 +252,9 @@ class _NameBillGameScreenState extends State<NameBillGameScreen> {
             showFeedback = true;
             isCorrect = isCorrectAnswer;
             if (isCorrectAnswer) {
-              feedback = 'Correct!\n$fact';
+              feedback = translate('Correct!') + '\n' + translate(fact);
             } else {
-              feedback = 'Try again!';
+              feedback = translate('Try again!');
             }
           });
         },
@@ -220,7 +266,7 @@ class _NameBillGameScreenState extends State<NameBillGameScreen> {
           ),
         ),
         child: Text(
-          text,
+          translate(text),
           style: const TextStyle(
             fontSize: 16,
             color: Colors.black87,

@@ -68,6 +68,36 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
     '10 pennies': '10 centavos',
     '2 dimes and 1 nickel': '2 monedas de diez centavos y 1 níquel',
     '10 dimes': '10 monedas de diez centavos',
+    'How many five dollar bills equal one twenty dollar bill?': 
+    '¿Cuántos billetes de cinco dólares equivalen a un billete de veinte dólares?',
+    'How many ten dollar bills equal one hundred dollar bill?':
+    '¿Cuántos billetes de diez dólares equivalen a un billete de cien dólares?',
+    'How many twenty dollar bills equal one hundred dollar bill?':
+    '¿Cuántos billetes de veinte dólares equivalen a un billete de cien dólares?',
+    'How many one dollar bills equal one ten dollar bill?':
+    '¿Cuántos billetes de un dólar equivalen a un billete de diez dólares?',
+    'How many two dollar bills equal one twenty dollar bill?':
+    '¿Cuántos billetes de dos dólares equivalen a un billete de veinte dólares?',
+    'How many five dollar bills equal one fifty dollar bill?':
+    '¿Cuántos billetes de cinco dólares equivalen a un billete de cincuenta dólares?',
+    '4 five dollar bills': '4 billetes de cinco dólares',
+    '10 ten dollar bills': '10 billetes de diez dólares',
+    '5 twenty dollar bills': '5 billetes de veinte dólares',
+    '10 one dollar bills': '10 billetes de un dólar',
+    '10 two dollar bills': '10 billetes de dos dólares',
+    '10 five dollar bills': '10 billetes de cinco dólares',
+    'Fun fact: \$20 = \$5 × 4, this is a common combination in ATMs!':
+    '¡Dato curioso: \$20 = \$5 × 4, esta es una combinación común en los cajeros automáticos!',
+    'Fun fact: \$100 = \$10 × 10, making it easy to calculate percentages!':
+    '¡Dato curioso: \$100 = \$10 × 10, ¡lo que facilita el cálculo de porcentajes!',
+    'Fun fact: Both \$20 and \$100 bills are commonly used in ATMs!':
+    '¡Dato curioso: Los billetes de \$20 y \$100 son comúnmente usados en los cajeros automáticos!',
+    'Fun fact: The \$1 bill is the most widely circulated denomination!':
+    '¡Dato curioso: ¡El billete de \$1 es la denominación más circulada!',
+    'Fun fact: The \$2 bill is still printed but in much smaller quantities!':
+    '¡Dato curioso: ¡El billete de \$2 todavía se imprime pero en cantidades mucho menores!',
+    'Fun fact: The \$50 bill features Ulysses S. Grant!':
+    '¡Dato curioso: ¡El billete de \$50 presenta a Ulysses S. Grant!',
   };
 
   String translate(String text) {
@@ -89,9 +119,9 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
               child: Column(
                 children: [
                   const SizedBox(height: 40),
-                  const Text(
-                    'Coin value conversion',
-                    style: TextStyle(
+                  Text(
+                    translate('Coin value conversion'),
+                    style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFB54B3C),
@@ -99,7 +129,7 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    'Question $currentQuestion',
+                    translate('Question') + ' $currentQuestion',
                     style: const TextStyle(
                       fontSize: 24,
                       color: Colors.brown,
@@ -109,7 +139,7 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      currentQ['question'],
+                      translate(currentQ['question']),
                       style: const TextStyle(
                         fontSize: 20,
                         color: Colors.black87,
@@ -197,7 +227,9 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
                 color: Colors.black87,
               ),
               onPressed: () {
-                // Translation logic will be added later
+                setState(() {
+                  isSpanish = !isSpanish;
+                });
               },
             ),
           ),
@@ -217,7 +249,7 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
         ),
       ),
       child: Text(
-        text,
+        translate(text),
         style: const TextStyle(
           fontSize: 16,
           color: Colors.black87,
@@ -236,9 +268,9 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
             showFeedback = true;
             isCorrect = isCorrectAnswer;
             if (isCorrectAnswer) {
-              feedback = 'Correct!\n$fact';
+              feedback = translate('Correct!') + '\n' + translate(fact);
             } else {
-              feedback = 'Try again!';
+              feedback = translate('Try again!');
             }
           });
         },
@@ -250,7 +282,7 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
           ),
         ),
         child: Text(
-          text,
+          translate(text),
           style: const TextStyle(
             fontSize: 16,
             color: Colors.black87,

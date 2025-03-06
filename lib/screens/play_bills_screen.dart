@@ -3,88 +3,89 @@ import 'name_bill_game_screen.dart';
 import 'value_bill_game_screen.dart';
 import 'bill_conversion_game_screen.dart';
 
-class PlayBillsScreen extends StatelessWidget {
+class PlayBillsScreen extends StatefulWidget {
   const PlayBillsScreen({super.key});
+
+  @override
+  State<PlayBillsScreen> createState() => _PlayBillsScreenState();
+}
+
+class _PlayBillsScreenState extends State<PlayBillsScreen> {
+  bool isSpanish = false;
+
+  final Map<String, String> translations = {
+    'Bill Games': 'Juegos de Billetes',
+    'Name the Bill': 'Nombra el Billete',
+    'Value of the Bill': 'Valor del Billete',
+    'Bill value conversion': 'Conversión de valor de billetes',
+  };
+
+  String translate(String text) {
+    if (!isSpanish) return text;
+    return translations[text] ?? text;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(16.0),
-            child: Center(
-              child: Column(
+      body: Container(
+        color: Colors.white,
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            children: [
+              const Spacer(flex: 2),
+              Text(
+                translate('Bill Games'),
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFB54B3C),
+                ),
+              ),
+              const Spacer(flex: 2),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Spacer(flex: 2),
-                  const Text(
-                    'Bill Games',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFB54B3C),
-                    ),
-                  ),
-                  const Spacer(flex: 2),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildGameButton('Name the Bill', () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const NameBillGameScreen()),
-                        );
-                      }),
-                      const SizedBox(height: 20),
-                      _buildGameButton('Value of the Bill', () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const ValueBillGameScreen()),
-                        );
-                      }),
-                      const SizedBox(height: 20),
-                      _buildGameButton('Bill value conversion', () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const BillConversionGameScreen()),
-                        );
-                      }),
-                    ],
-                  ),
-                  const Spacer(flex: 3),
-                  Center(
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.home,
-                        size: 40,
-                        color: Colors.green,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                  _buildGameButton(translate('Name the Bill'), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const NameBillGameScreen()),
+                    );
+                  }),
                   const SizedBox(height: 20),
+                  _buildGameButton(translate('Value of the Bill'), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ValueBillGameScreen()),
+                    );
+                  }),
+                  const SizedBox(height: 20),
+                  _buildGameButton(translate('Bill value conversion'), () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const BillConversionGameScreen()),
+                    );
+                  }),
                 ],
               ),
-            ),
-          ),
-          Positioned(
-            top: 40,
-            right: 16,
-            child: IconButton(
-              icon: const Icon(
-                Icons.translate,
-                size: 30,
-                color: Colors.black87,
+              const Spacer(flex: 3),
+              Center(
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.home,
+                    size: 40,
+                    color: Colors.green,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
               ),
-              onPressed: () {
-                // Translation logic will be added later
-              },
-            ),
+              const SizedBox(height: 20),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -109,6 +110,7 @@ class PlayBillsScreen extends StatelessWidget {
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),
+          textAlign: TextAlign.center,
         ),
       ),
     );
