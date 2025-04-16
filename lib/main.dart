@@ -4,8 +4,14 @@ import 'screens/learn_bills_screen.dart';
 import 'screens/play_coins_screen.dart';
 import 'screens/play_bills_screen.dart';
 import 'screens/quiz_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'config/firebase_config.dart';
+import 'services/analytics_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseConfig.initialize();
   runApp(const MyApp());
 }
 
@@ -21,6 +27,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const CurrencyChampionsHome(),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      ],
     );
   }
 }
@@ -43,6 +52,12 @@ class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
     'Play with Bills': 'Juega con Billetes',
     'Take Quiz': 'Tomar Prueba',
   };
+
+  @override
+  void initState() {
+    super.initState();
+    AnalyticsService.logScreenView('HomeScreen');
+  }
 
   String translate(String text) {
     if (!isSpanish) return text;
@@ -87,18 +102,24 @@ class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
                                   _buildMenuButton(
                                     translate('Learn about Coins'),
                                     Colors.lightGreen[100]!,
-                                    () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const LearnCoinsScreen()),
-                                    ),
+                                    () {
+                                      AnalyticsService.logButtonClick('LearnCoins');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const LearnCoinsScreen()),
+                                      );
+                                    },
                                   ),
                                   _buildMenuButton(
                                     translate('Learn about Bills'),
                                     Colors.lightGreen[100]!,
-                                    () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const LearnBillsScreen()),
-                                    ),
+                                    () {
+                                      AnalyticsService.logButtonClick('LearnBills');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const LearnBillsScreen()),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
@@ -109,18 +130,24 @@ class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
                                   _buildMenuButton(
                                     translate('Play with Coins'),
                                     Colors.lightGreen[100]!,
-                                    () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const PlayCoinsScreen()),
-                                    ),
+                                    () {
+                                      AnalyticsService.logButtonClick('PlayCoins');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const PlayCoinsScreen()),
+                                      );
+                                    },
                                   ),
                                   _buildMenuButton(
                                     translate('Play with Bills'),
                                     Colors.lightGreen[100]!,
-                                    () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => const PlayBillsScreen()),
-                                    ),
+                                    () {
+                                      AnalyticsService.logButtonClick('PlayBills');
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const PlayBillsScreen()),
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
@@ -128,10 +155,13 @@ class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
                               _buildMenuButton(
                                 translate('Take Quiz'),
                                 const Color(0xFFE6C5B9),
-                                () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const QuizScreen()),
-                                ),
+                                () {
+                                  AnalyticsService.logButtonClick('TakeQuiz');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const QuizScreen()),
+                                  );
+                                },
                                 width: 200,
                               ),
                               const SizedBox(height: 40),
@@ -171,6 +201,7 @@ class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
                 color: Colors.black87,
               ),
               onPressed: () {
+                AnalyticsService.logButtonClick('Translate');
                 setState(() {
                   isSpanish = !isSpanish;
                 });
