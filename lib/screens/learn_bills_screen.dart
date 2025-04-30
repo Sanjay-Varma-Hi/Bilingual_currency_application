@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/score_widget.dart';
 
 class LearnBillsScreen extends StatefulWidget {
   const LearnBillsScreen({super.key});
@@ -91,17 +92,23 @@ class _LearnBillsScreenState extends State<LearnBillsScreen> {
           Positioned(
             top: 40,
             right: 16,
-            child: IconButton(
-              icon: const Icon(
-                Icons.translate,
-                size: 30,
-                color: Colors.black87,
-              ),
-              onPressed: () {
-                setState(() {
-                  isSpanish = !isSpanish;
-                });
-              },
+            child: Column(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.translate,
+                    size: 30,
+                    color: Colors.black87,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isSpanish = !isSpanish;
+                    });
+                  },
+                ),
+                const SizedBox(height: 8),
+                const ScoreWidget(),
+              ],
             ),
           ),
         ],

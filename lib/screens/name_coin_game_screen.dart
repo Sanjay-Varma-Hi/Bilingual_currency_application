@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../globals/score.dart';
+import '../widgets/score_widget.dart';
 
 class NameCoinGameScreen extends StatefulWidget {
   const NameCoinGameScreen({super.key});
@@ -8,12 +10,15 @@ class NameCoinGameScreen extends StatefulWidget {
 }
 
 class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
+  bool isSpanish = false;
   int currentQuestion = 1;
   bool showFeedback = false;
+  String? selectedAnswer;
   bool? isCorrect;
   String feedback = '';
-  bool isSpanish = false;
-  
+  List<bool> answeredCorrectly = [false, false, false, false];
+  bool scoreAwarded = false;
+
   final Map<String, String> translations = {
     'Name the Coin': 'Nombra la Moneda',
     'Question': 'Pregunta',
@@ -22,12 +27,10 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
     'Try again!': '¡Inténtalo de nuevo!',
     'Next': 'Siguiente',
     'Prev': 'Anterior',
-    'Cent': 'Centavo',
+    'Penny': 'Centavo',
     'Nickel': 'Níquel',
     'Dime': 'Diez Centavos',
     'Quarter': 'Cuarto de Dólar',
-    'Half Dollar': 'Medio Dólar',
-    'Dollar': 'Dólar',
     'Fun fact: The dime is the smallest and thinnest of all U.S. coins!': 
     '¡Dato curioso: La moneda de diez centavos es la más pequeña y delgada de todas las monedas estadounidenses!',
     'Fun fact: The Lincoln penny design is the longest-running design in U.S. Mint history!':
@@ -36,10 +39,6 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
     '¡Dato curioso: A pesar de su nombre, el níquel está hecho de 75% cobre!',
     'Fun fact: State quarters program was one of the most successful coin programs in history!':
     '¡Dato curioso: El programa de cuartos estatales fue uno de los programas de monedas más exitosos de la historia!',
-    'Fun fact: The Half Dollar coin features President John F. Kennedy!':
-    '¡Dato curioso: La moneda de medio dólar presenta al Presidente John F. Kennedy!',
-    'Fun fact: The Dollar coin is also known as the "Golden Dollar"!':
-    '¡Dato curioso: La moneda de un dólar también se conoce como el "Dólar Dorado"!',
   };
 
   String translate(String text) {
@@ -47,50 +46,59 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
     return translations[text] ?? text;
   }
 
-  // List of questions with their answers and images
   final List<Map<String, dynamic>> questions = [
     {
-      'image': 'assets/dime_front.png',
-      'correctAnswer': 'Dime',
-      'options': ['Nickel', 'Dime'],
-      'fact': 'Fun fact: The dime is the smallest and thinnest of all U.S. coins!'
-    },
-    {
       'image': 'assets/cent_front.png',
-      'correctAnswer': 'Penny',
-      'options': ['Penny', 'Quarter'],
+      'options': ['Penny', 'Nickel', 'Dime', 'Quarter'],
+      'correct': 'Penny',
       'fact': 'Fun fact: The Lincoln penny design is the longest-running design in U.S. Mint history!'
     },
     {
       'image': 'assets/nickel_front.png',
-      'correctAnswer': 'Nickel',
-      'options': ['Dime', 'Nickel'],
+      'options': ['Penny', 'Nickel', 'Dime', 'Quarter'],
+      'correct': 'Nickel',
       'fact': 'Fun fact: Despite its name, the nickel is actually made of 75% copper!'
     },
     {
+      'image': 'assets/dime_front.png',
+      'options': ['Penny', 'Nickel', 'Dime', 'Quarter'],
+      'correct': 'Dime',
+      'fact': 'Fun fact: The dime is the smallest and thinnest of all U.S. coins!'
+    },
+    {
       'image': 'assets/quarter_front.png',
-      'correctAnswer': 'Quarter',
-      'options': ['Quarter', 'Penny'],
+      'options': ['Penny', 'Nickel', 'Dime', 'Quarter'],
+      'correct': 'Quarter',
       'fact': 'Fun fact: State quarters program was one of the most successful coin programs in history!'
-    },
-    {
-      'image': 'assets/halfdollar_front.png',
-      'correctAnswer': 'Half Dollar',
-      'options': ['Half Dollar', 'Dollar'],
-      'fact': 'Fun fact: The Half Dollar coin features President John F. Kennedy!'
-    },
-    {
-      'image': 'assets/dollar_front.png',
-      'correctAnswer': 'Dollar',
-      'options': ['Half Dollar', 'Dollar'],
-      'fact': 'Fun fact: The Dollar coin is also known as the "Golden Dollar"!'
     },
   ];
 
+  void checkAnswer(String answer) {
+    setState(() {
+      selectedAnswer = answer;
+      showFeedback = true;
+      isCorrect = answer == questions[currentQuestion - 1]['correct'];
+      
+      if (isCorrect!) {
+        answeredCorrectly[currentQuestion - 1] = true;
+        feedback = '${translate('Correct!')}\n${translate(questions[currentQuestion - 1]['fact'])}';
+      } else {
+        answeredCorrectly[currentQuestion - 1] = false;
+        feedback = translate('Try again!');
+      }
+
+      // If last question and all correct, award score (only once)
+      if (currentQuestion == questions.length &&
+          answeredCorrectly.every((v) => v) &&
+          !scoreAwarded) {
+        GlobalScore.addPoints(0.5);
+        scoreAwarded = true;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentQ = questions[currentQuestion - 1];
-
     return Scaffold(
       body: Stack(
         children: [
@@ -111,7 +119,7 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    translate('Question') + ' $currentQuestion',
+                    '${translate('Question')} $currentQuestion',
                     style: const TextStyle(
                       fontSize: 24,
                       color: Colors.brown,
@@ -126,38 +134,46 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  // Coin Image
                   Image.asset(
-                    currentQ['image'],
+                    questions[currentQuestion - 1]['image'],
                     height: 150,
                     fit: BoxFit.contain,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(
-                        Icons.monetization_on,
-                        size: 150,
-                        color: Colors.grey,
-                      );
-                    },
                   ),
                   const SizedBox(height: 40),
-                  // Answer Buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildAnswerButton(
-                        currentQ['options'][0],
-                        currentQ['options'][0] == currentQ['correctAnswer'],
-                        currentQ['fact'],
+                  ...questions[currentQuestion - 1]['options'].map<Widget>((option) {
+                    final bool isSelected = selectedAnswer == option;
+                    final bool isCorrectAnswer = option == questions[currentQuestion - 1]['correct'];
+                    
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ElevatedButton(
+                        onPressed: showFeedback ? null : () => checkAnswer(option),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: showFeedback
+                              ? (isCorrectAnswer ? Colors.green.shade100 : (isSelected ? Colors.red.shade100 : Colors.grey.shade100))
+                              : (isSelected ? Colors.blue.shade100 : Colors.grey.shade100),
+                          minimumSize: const Size(200, 50),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              translate(option),
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              ),
+                            ),
+                            if (showFeedback && isCorrectAnswer)
+                              const Icon(Icons.check, color: Colors.green)
+                            else if (showFeedback && isSelected && !isCorrectAnswer)
+                              const Icon(Icons.close, color: Colors.red),
+                          ],
+                        ),
                       ),
-                      _buildAnswerButton(
-                        currentQ['options'][1],
-                        currentQ['options'][1] == currentQ['correctAnswer'],
-                        currentQ['fact'],
-                      ),
-                    ],
-                  ),
+                    );
+                  }).toList(),
                   const SizedBox(height: 20),
-                  // Feedback Text
                   if (showFeedback)
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -177,7 +193,6 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
                       ),
                     ),
                   const Spacer(),
-                  // Navigation Buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -186,6 +201,7 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
                           setState(() {
                             currentQuestion--;
                             showFeedback = false;
+                            selectedAnswer = null;
                           });
                         }),
                       const SizedBox(width: 20),
@@ -205,11 +221,11 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
                           setState(() {
                             currentQuestion++;
                             showFeedback = false;
+                            selectedAnswer = null;
                           });
                         }),
                     ],
                   ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -217,17 +233,35 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
           Positioned(
             top: 40,
             right: 16,
-            child: IconButton(
-              icon: const Icon(
-                Icons.translate,
-                size: 30,
-                color: Colors.black87,
-              ),
-              onPressed: () {
-                setState(() {
-                  isSpanish = !isSpanish;
-                });
-              },
+            child: Column(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.translate,
+                    size: 30,
+                    color: Colors.black87,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isSpanish = !isSpanish;
+                    });
+                  },
+                ),
+                const SizedBox(height: 8),
+                const ScoreWidget(),
+                const SizedBox(height: 8),
+                IconButton(
+                  icon: const Icon(
+                    Icons.refresh,
+                    size: 28,
+                    color: Colors.blue,
+                  ),
+                  tooltip: 'Reset Score',
+                  onPressed: () {
+                    GlobalScore.resetScore();
+                  },
+                ),
+              ],
             ),
           ),
         ],
@@ -239,55 +273,11 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue[100],
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        minimumSize: const Size(100, 40),
       ),
-      child: Text(
-        translate(text),
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.black87,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAnswerButton(String text, bool isCorrectAnswer, String fact) {
-    return SizedBox(
-      width: 140,
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            showFeedback = true;
-            isCorrect = isCorrectAnswer;
-            if (isCorrectAnswer) {
-              feedback = translate('Correct!') + '\n' + translate(fact);
-            } else {
-              feedback = translate('Try again!');
-            }
-          });
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFE6C5B9),
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-        child: Text(
-          translate(text),
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black87,
-            fontWeight: FontWeight.w500,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
+      child: Text(translate(text)),
     );
   }
 } 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import '../globals/score.dart';
 
 class QuizLevelThreeScreen extends StatefulWidget {
   const QuizLevelThreeScreen({super.key});
@@ -43,6 +44,8 @@ class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
   bool isSpanish = false;
   bool isCorrect = false;
   int score = 0;
+  bool scoreAwarded = false;
+  int correctCount = 0;
 
   @override
   void initState() {
@@ -83,6 +86,12 @@ class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
       isCorrect = (total == targetAmount);
       if (isCorrect) {
         score += 10;
+        correctCount++;
+        // Award 0.5 points if 5 correct answers and not already awarded
+        if (correctCount == 5 && !scoreAwarded) {
+          GlobalScore.addPoints(0.5);
+          scoreAwarded = true;
+        }
       }
     });
   }

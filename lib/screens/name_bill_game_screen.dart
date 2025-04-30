@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../globals/score.dart';
 
 class NameBillGameScreen extends StatefulWidget {
   const NameBillGameScreen({super.key});
@@ -13,6 +14,8 @@ class _NameBillGameScreenState extends State<NameBillGameScreen> {
   bool? isCorrect;
   String feedback = '';
   bool isSpanish = false;
+  List<bool> answeredCorrectly = [false, false, false, false, false, false];
+  bool scoreAwarded = false;
 
   final List<Map<String, dynamic>> questions = [
     {
@@ -252,9 +255,18 @@ class _NameBillGameScreenState extends State<NameBillGameScreen> {
             showFeedback = true;
             isCorrect = isCorrectAnswer;
             if (isCorrectAnswer) {
+              answeredCorrectly[currentQuestion - 1] = true;
               feedback = translate('Correct!') + '\n' + translate(fact);
             } else {
+              answeredCorrectly[currentQuestion - 1] = false;
               feedback = translate('Try again!');
+            }
+            // If last question and all correct, award score (only once)
+            if (currentQuestion == questions.length &&
+                answeredCorrectly.every((v) => v) &&
+                !scoreAwarded) {
+              GlobalScore.addPoints(0.5);
+              scoreAwarded = true;
             }
           });
         },

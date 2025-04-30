@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import '../globals/score.dart';
 
 class QuizLevelFourScreen extends StatefulWidget {
   const QuizLevelFourScreen({super.key});
@@ -13,6 +14,7 @@ class _QuizLevelFourScreenState extends State<QuizLevelFourScreen> {
   int score = 0;
   bool showResult = false;
   List<String> userAnswers = [];
+  bool scoreAwarded = false;
   
   Map<String, String> translations = {
     'Money Problems': 'Problemas de Dinero',
@@ -86,6 +88,10 @@ class _QuizLevelFourScreenState extends State<QuizLevelFourScreen> {
         currentQuestionIndex++;
       } else {
         showResult = true;
+        if (score == problems.length * 10 && !scoreAwarded) {
+          GlobalScore.addPoints(0.5);
+          scoreAwarded = true;
+        }
       }
     });
   }

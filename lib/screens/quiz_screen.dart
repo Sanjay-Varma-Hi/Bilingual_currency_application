@@ -3,6 +3,7 @@ import 'quiz_level_one_screen.dart';
 import 'quiz_level_two_screen.dart';
 import 'quiz_level_three_screen.dart';
 import 'quiz_level_four_screen.dart';
+import '../widgets/score_widget.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -58,17 +59,23 @@ class _QuizScreenState extends State<QuizScreen> {
                         color: Color(0xFFB54B3C),
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.translate,
-                        size: 30,
-                        color: Colors.black87,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isSpanish = !isSpanish;
-                        });
-                      },
+                    Column(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.translate,
+                            size: 30,
+                            color: Colors.black87,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              isSpanish = !isSpanish;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 8),
+                        const ScoreWidget(),
+                      ],
                     ),
                   ],
                 ),

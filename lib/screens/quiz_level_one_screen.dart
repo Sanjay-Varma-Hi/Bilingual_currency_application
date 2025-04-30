@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'quiz_level_two_screen.dart';
+import '../widgets/score_widget.dart';
+import '../globals/score.dart';
 
 class QuizLevelOneScreen extends StatefulWidget {
   const QuizLevelOneScreen({super.key});
@@ -15,6 +17,7 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
   Set<String> completedPairs = {};
   int score = 0;
   bool showCongratulations = false;
+  bool scoreAwarded = false;
 
   final Map<String, String> translations = {
     'Level 1': 'Nivel 1',
@@ -94,6 +97,10 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
         
         if (completedPairs.length == pairs.length) {
           showCongratulations = true;
+          if (!scoreAwarded) {
+            GlobalScore.addPoints(0.5);
+            scoreAwarded = true;
+          }
         }
       });
     }
@@ -126,17 +133,23 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
                             color: Color(0xFFB54B3C),
                           ),
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.translate,
-                            size: 30,
-                            color: Colors.black87,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              isSpanish = !isSpanish;
-                            });
-                          },
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.translate,
+                                size: 30,
+                                color: Colors.black87,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  isSpanish = !isSpanish;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            const ScoreWidget(),
+                          ],
                         ),
                       ],
                     ),

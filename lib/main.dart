@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'config/firebase_config.dart';
 import 'services/analytics_service.dart';
+import 'widgets/score_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -194,18 +195,24 @@ class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
           Positioned(
             top: 40,
             right: 16,
-            child: IconButton(
-              icon: const Icon(
-                Icons.translate,
-                size: 30,
-                color: Colors.black87,
-              ),
-              onPressed: () {
-                AnalyticsService.logButtonClick('Translate');
-                setState(() {
-                  isSpanish = !isSpanish;
-                });
-              },
+            child: Column(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.translate,
+                    size: 30,
+                    color: Colors.black87,
+                  ),
+                  onPressed: () {
+                    AnalyticsService.logButtonClick('Translate');
+                    setState(() {
+                      isSpanish = !isSpanish;
+                    });
+                  },
+                ),
+                const SizedBox(height: 8),
+                const ScoreWidget(),
+              ],
             ),
           ),
         ],

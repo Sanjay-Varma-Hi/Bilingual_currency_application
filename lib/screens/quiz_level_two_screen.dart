@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../widgets/score_widget.dart';
+import '../globals/score.dart';
 
 class QuizLevelTwoScreen extends StatefulWidget {
   const QuizLevelTwoScreen({super.key});
@@ -14,6 +16,7 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
   Map<int, String?> userAnswers = {};
   bool showResults = false;
   Map<int, bool> answerCorrectness = {};
+  bool scoreAwarded = false;
 
   final Map<String, String> translations = {
     'Level 2': 'Nivel 2',
@@ -84,6 +87,11 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
   void submitQuiz() {
     setState(() {
       showResults = true;
+      // Only award 0.5 points if all answers are correct and not already awarded
+      if (score == questions.length * 10 && !scoreAwarded) {
+        GlobalScore.addPoints(0.5);
+        scoreAwarded = true;
+      }
     });
   }
 
@@ -135,17 +143,23 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
                             ),
                           ],
                         ),
-                        IconButton(
-                          icon: const Icon(
-                            Icons.translate,
-                            size: 30,
-                            color: Colors.black87,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              isSpanish = !isSpanish;
-                            });
-                          },
+                        Column(
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.translate,
+                                size: 30,
+                                color: Colors.black87,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  isSpanish = !isSpanish;
+                                });
+                              },
+                            ),
+                            const SizedBox(height: 8),
+                            const ScoreWidget(),
+                          ],
                         ),
                       ],
                     ),

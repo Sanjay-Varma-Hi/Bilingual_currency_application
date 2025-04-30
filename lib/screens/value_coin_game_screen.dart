@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../globals/score.dart';
 
 class ValueCoinGameScreen extends StatefulWidget {
   const ValueCoinGameScreen({super.key});
@@ -13,6 +14,8 @@ class _ValueCoinGameScreenState extends State<ValueCoinGameScreen> {
   bool? isCorrect;
   String feedback = '';
   bool isSpanish = false;
+  List<bool> answeredCorrectly = [false, false, false, false, false, false];
+  bool scoreAwarded = false;
 
   final List<Map<String, dynamic>> questions = [
     {
@@ -244,14 +247,24 @@ class _ValueCoinGameScreenState extends State<ValueCoinGameScreen> {
     return SizedBox(
       width: 300,
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: showFeedback ? null : () {
           setState(() {
             showFeedback = true;
             isCorrect = isCorrectAnswer;
             if (isCorrectAnswer) {
+              answeredCorrectly[currentQuestion - 1] = true;
               feedback = translate('Correct!') + '\n' + translate(fact);
             } else {
+              answeredCorrectly[currentQuestion - 1] = false;
               feedback = translate('Try again!');
+            }
+
+            // If last question and all correct, award score (only once)
+            if (currentQuestion == questions.length &&
+                answeredCorrectly.every((v) => v) &&
+                !scoreAwarded) {
+              GlobalScore.addPoints(0.5);
+              scoreAwarded = true;
             }
           });
         },
