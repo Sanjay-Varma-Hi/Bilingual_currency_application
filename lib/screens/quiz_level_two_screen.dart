@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/score_widget.dart';
 import '../globals/score.dart';
+import 'quiz_level_three_screen.dart';
 
 class QuizLevelTwoScreen extends StatefulWidget {
   const QuizLevelTwoScreen({super.key});
@@ -10,6 +11,7 @@ class QuizLevelTwoScreen extends StatefulWidget {
 }
 
 class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
+  static bool hasAwardedGlobalScore = false;
   bool isSpanish = false;
   int currentQuestionIndex = 0;
   int score = 0;
@@ -72,14 +74,14 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
 
   void checkAnswer(String selectedAnswer) {
     setState(() {
-      userAnswers[currentQuestionIndex] = selectedAnswer;
-      // Check if the answer is correct and update score immediately
-      bool isCorrect = selectedAnswer == questions[currentQuestionIndex].correctAnswer;
-      answerCorrectness[currentQuestionIndex] = isCorrect;
-      
-      // Update score only if this question hasn't been answered correctly before
-      if (isCorrect && !answerCorrectness.containsKey(currentQuestionIndex)) {
-        score += 10;
+      // Only allow answering if not already answered
+      if (!userAnswers.containsKey(currentQuestionIndex)) {
+        userAnswers[currentQuestionIndex] = selectedAnswer;
+        bool isCorrect = selectedAnswer == questions[currentQuestionIndex].correctAnswer;
+        answerCorrectness[currentQuestionIndex] = isCorrect;
+        if (isCorrect) {
+          score += 10;
+        }
       }
     });
   }
@@ -88,9 +90,10 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
     setState(() {
       showResults = true;
       // Only award 0.5 points if all answers are correct and not already awarded
-      if (score == questions.length * 10 && !scoreAwarded) {
+      if (score == questions.length * 10 && !scoreAwarded && !hasAwardedGlobalScore) {
         GlobalScore.addPoints(0.5);
         scoreAwarded = true;
+        hasAwardedGlobalScore = true;
       }
     });
   }
@@ -380,7 +383,12 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
                   const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      // Navigate to next level when implemented
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuizLevelThreeScreen(),
+                        ),
+                      );
                     },
                     child: Text(translate('Next Level')),
                   ),

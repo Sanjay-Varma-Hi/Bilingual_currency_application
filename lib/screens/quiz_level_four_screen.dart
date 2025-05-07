@@ -10,6 +10,7 @@ class QuizLevelFourScreen extends StatefulWidget {
 }
 
 class _QuizLevelFourScreenState extends State<QuizLevelFourScreen> {
+  static bool hasAwardedGlobalScore = false;
   int currentQuestionIndex = 0;
   int score = 0;
   bool showResult = false;
@@ -88,9 +89,10 @@ class _QuizLevelFourScreenState extends State<QuizLevelFourScreen> {
         currentQuestionIndex++;
       } else {
         showResult = true;
-        if (score == problems.length * 10 && !scoreAwarded) {
+        if (score == problems.length * 10 && !scoreAwarded && !hasAwardedGlobalScore) {
           GlobalScore.addPoints(0.5);
           scoreAwarded = true;
+          hasAwardedGlobalScore = true;
         }
       }
     });

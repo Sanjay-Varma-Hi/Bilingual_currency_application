@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import '../globals/score.dart';
+import 'quiz_level_four_screen.dart';
 
 class QuizLevelThreeScreen extends StatefulWidget {
   const QuizLevelThreeScreen({super.key});
@@ -10,6 +11,7 @@ class QuizLevelThreeScreen extends StatefulWidget {
 }
 
 class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
+  static bool hasAwardedGlobalScore = false;
   double targetAmount = 0.0;
   Map<String, int> selectedCoins = {
     'penny': 0,
@@ -39,6 +41,10 @@ class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
     'Correct!': '¡Correcto!',
     'Try Again': 'Intenta de Nuevo',
     'Next Amount': 'Siguiente Cantidad',
+    'Congratulations!': '¡Felicitaciones!',
+    'You completed the level!': '¡Completaste el nivel!',
+    'Next Level': 'Siguiente Nivel',
+    'Score': 'Puntaje',
   };
 
   bool isSpanish = false;
@@ -46,6 +52,9 @@ class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
   int score = 0;
   bool scoreAwarded = false;
   int correctCount = 0;
+  int currentQuestion = 1;
+  final int totalQuestions = 10;
+  bool showCompletion = false;
 
   @override
   void initState() {
@@ -72,6 +81,17 @@ class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
     });
   }
 
+  void resetQuiz() {
+    setState(() {
+      score = 0;
+      correctCount = 0;
+      currentQuestion = 1;
+      scoreAwarded = false;
+      showCompletion = false;
+      generateNewTarget();
+    });
+  }
+
   double getCurrentTotal() {
     double total = 0;
     selectedCoins.forEach((coin, count) {
@@ -87,12 +107,29 @@ class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
       if (isCorrect) {
         score += 10;
         correctCount++;
-        // Award 0.5 points if 5 correct answers and not already awarded
-        if (correctCount == 5 && !scoreAwarded) {
-          GlobalScore.addPoints(0.5);
-          scoreAwarded = true;
-        }
       }
+      // Move to next question or show completion
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (currentQuestion < totalQuestions) {
+          setState(() {
+            currentQuestion++;
+            generateNewTarget();
+          });
+        } else {
+          _handleQuizCompletion();
+        }
+      });
+    });
+  }
+
+  void _handleQuizCompletion() {
+    setState(() {
+      if (correctCount == totalQuestions && !scoreAwarded && !hasAwardedGlobalScore) {
+        GlobalScore.addPoints(0.5);
+        scoreAwarded = true;
+        hasAwardedGlobalScore = true;
+      }
+      showCompletion = true;
     });
   }
 
@@ -152,72 +189,134 @@ class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              '${translate('Make')}: \$${targetAmount.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              '${translate('Current Total')}: \$${getCurrentTotal().toStringAsFixed(2)}',
-              style: TextStyle(
-                fontSize: 20,
-                color: getCurrentTotal() > targetAmount ? Colors.red : Colors.black,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Text(
+                  '${translate('Make')}: \$${targetAmount.toStringAsFixed(2)}',
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  '${translate('Score')}: $score',
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  '${translate('Current Total')}: \$${getCurrentTotal().toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: getCurrentTotal() > targetAmount ? Colors.red : Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  '$currentQuestion / $totalQuestions',
+                  style: const TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+                const SizedBox(height: 20),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        buildCoinSelector('penny', 'assets/cent_front.png'),
+                        buildCoinSelector('nickel', 'assets/nickel_front.png'),
+                        buildCoinSelector('dime', 'assets/dime_front.png'),
+                        buildCoinSelector('quarter', 'assets/quarter_front.png'),
+                        buildCoinSelector('one', 'assets/one_front.png'),
+                        buildCoinSelector('five', 'assets/five_front.png'),
+                        buildCoinSelector('ten', 'assets/ten_front.png'),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    buildCoinSelector('penny', 'assets/cent_front.png'),
-                    buildCoinSelector('nickel', 'assets/nickel_front.png'),
-                    buildCoinSelector('dime', 'assets/dime_front.png'),
-                    buildCoinSelector('quarter', 'assets/quarter_front.png'),
-                    buildCoinSelector('one', 'assets/one_front.png'),
-                    buildCoinSelector('five', 'assets/five_front.png'),
-                    buildCoinSelector('ten', 'assets/ten_front.png'),
+                    ElevatedButton(
+                      onPressed: isCorrect ? null : checkAnswer,
+                      child: Text(translate('Check Answer')),
+                    ),
+                    ElevatedButton(
+                      onPressed: resetSelections,
+                      child: Text(translate('Reset')),
+                    ),
                   ],
                 ),
-              ),
-            ),
-            Text(
-              'Score: $score',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: checkAnswer,
-                  child: Text(translate('Check Answer')),
-                ),
-                ElevatedButton(
-                  onPressed: resetSelections,
-                  child: Text(translate('Reset')),
-                ),
+                if (isCorrect) ...[
+                  const SizedBox(height: 10),
+                  Text(
+                    translate('Correct!'),
+                    style: const TextStyle(
+                      color: Colors.green,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ],
             ),
-            if (isCorrect) ...[
-              const SizedBox(height: 20),
+          ),
+          if (showCompletion) _buildCompletionOverlay(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompletionOverlay(BuildContext context) {
+    return Container(
+      color: Colors.black54,
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
               Text(
-                translate('Correct!'),
+                translate('Congratulations!'),
                 style: const TextStyle(
-                  color: Colors.green,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
+                  color: Color(0xFFB54B3C),
                 ),
               ),
-              ElevatedButton(
-                onPressed: generateNewTarget,
-                child: Text(translate('Next Amount')),
+              const SizedBox(height: 10),
+              Text(
+                translate('You completed the level!'),
+                style: const TextStyle(fontSize: 18),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: resetQuiz,
+                    child: Text(translate('Try Again')),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuizLevelFourScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(translate('Next Level')),
+                  ),
+                ],
               ),
             ],
-          ],
+          ),
         ),
       ),
     );

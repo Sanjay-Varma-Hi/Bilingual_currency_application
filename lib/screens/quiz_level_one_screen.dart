@@ -12,6 +12,7 @@ class QuizLevelOneScreen extends StatefulWidget {
 }
 
 class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
+  static bool hasAwardedGlobalScore = false;
   bool isSpanish = false;
   List<ItemPair> pairs = [];
   Set<String> completedPairs = {};
@@ -97,9 +98,10 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
         
         if (completedPairs.length == pairs.length) {
           showCongratulations = true;
-          if (!scoreAwarded) {
+          if (!scoreAwarded && !hasAwardedGlobalScore) {
             GlobalScore.addPoints(0.5);
             scoreAwarded = true;
+            hasAwardedGlobalScore = true;
           }
         }
       });

@@ -10,6 +10,7 @@ class NameCoinGameScreen extends StatefulWidget {
 }
 
 class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
+  static bool hasAwardedGlobalScore = false;
   bool isSpanish = false;
   int currentQuestion = 1;
   bool showFeedback = false;
@@ -87,12 +88,14 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
         feedback = translate('Try again!');
       }
 
-      // If last question and all correct, award score (only once)
+      // If last question and all correct, award score (only once per session)
       if (currentQuestion == questions.length &&
           answeredCorrectly.every((v) => v) &&
-          !scoreAwarded) {
+          !scoreAwarded &&
+          !hasAwardedGlobalScore) {
         GlobalScore.addPoints(0.5);
         scoreAwarded = true;
+        hasAwardedGlobalScore = true;
       }
     });
   }

@@ -9,6 +9,7 @@ class ValueBillGameScreen extends StatefulWidget {
 }
 
 class _ValueBillGameScreenState extends State<ValueBillGameScreen> {
+  static bool hasAwardedGlobalScore = false;
   int currentQuestion = 1;
   bool showFeedback = false;
   bool? isCorrect;
@@ -261,12 +262,14 @@ class _ValueBillGameScreenState extends State<ValueBillGameScreen> {
               answeredCorrectly[currentQuestion - 1] = false;
               feedback = translate('Try again!');
             }
-            // If last question and all correct, award score (only once)
+            // If last question and all correct, award score (only once per session)
             if (currentQuestion == questions.length &&
                 answeredCorrectly.every((v) => v) &&
-                !scoreAwarded) {
+                !scoreAwarded &&
+                !hasAwardedGlobalScore) {
               GlobalScore.addPoints(0.5);
               scoreAwarded = true;
+              hasAwardedGlobalScore = true;
             }
           });
         },

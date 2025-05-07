@@ -9,6 +9,7 @@ class ConversionGameScreen extends StatefulWidget {
 }
 
 class _ConversionGameScreenState extends State<ConversionGameScreen> {
+  static bool hasAwardedGlobalScore = false;
   int currentQuestion = 1;
   bool showFeedback = false;
   bool? isCorrect;
@@ -278,12 +279,14 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
               feedback = translate('Try again!');
             }
 
-            // If last question and all correct, award score (only once)
+            // If last question and all correct, award score (only once per session)
             if (currentQuestion == questions.length &&
                 answeredCorrectly.every((v) => v) &&
-                !scoreAwarded) {
+                !scoreAwarded &&
+                !hasAwardedGlobalScore) {
               GlobalScore.addPoints(0.5);
               scoreAwarded = true;
+              hasAwardedGlobalScore = true;
             }
           });
         },
