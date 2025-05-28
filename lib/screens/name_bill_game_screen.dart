@@ -270,6 +270,7 @@ class _NameBillGameScreenState extends State<NameBillGameScreen> {
               GlobalScore.addPoints(0.5);
               scoreAwarded = true;
               hasAwardedGlobalScore = true;
+              GlobalScore.updateQuizScore('Name the Bill', 1);
             }
           });
         },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/score_widget.dart';
+import '../widgets/score_with_popup_widget.dart';
 import 'name_coin_game_screen.dart';
 import 'value_coin_game_screen.dart';
 import 'conversion_game_screen.dart';
@@ -107,7 +107,7 @@ class _PlayCoinsScreenState extends State<PlayCoinsScreen> {
                   },
                 ),
                 const SizedBox(height: 8),
-                const ScoreWidget(),
+                const ScoreWithPopupWidget(),
               ],
             ),
           ),

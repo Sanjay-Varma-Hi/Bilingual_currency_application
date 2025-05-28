@@ -128,6 +128,7 @@ class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
         GlobalScore.addPoints(0.5);
         scoreAwarded = true;
         hasAwardedGlobalScore = true;
+        GlobalScore.updateQuizScore('Level 3', score);
       }
       showCompletion = true;
     });

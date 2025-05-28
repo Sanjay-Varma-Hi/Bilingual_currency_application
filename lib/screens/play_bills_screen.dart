@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/score_widget.dart';
+import '../widgets/score_with_popup_widget.dart';
 import 'name_bill_game_screen.dart';
 import 'value_bill_game_screen.dart';
 import 'bill_conversion_game_screen.dart';
@@ -107,7 +107,7 @@ class _PlayBillsScreenState extends State<PlayBillsScreen> {
                   },
                 ),
                 const SizedBox(height: 8),
-                const ScoreWidget(),
+                const ScoreWithPopupWidget(),
               ],
             ),
           ),

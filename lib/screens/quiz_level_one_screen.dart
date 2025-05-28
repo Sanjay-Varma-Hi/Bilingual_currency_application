@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'quiz_level_two_screen.dart';
-import '../widgets/score_widget.dart';
+import '../widgets/score_with_popup_widget.dart';
 import '../globals/score.dart';
 
 class QuizLevelOneScreen extends StatefulWidget {
@@ -103,6 +103,7 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
             scoreAwarded = true;
             hasAwardedGlobalScore = true;
           }
+          GlobalScore.updateQuizScore('Level 1', score);
         }
       });
     }
@@ -150,7 +151,6 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
                               },
                             ),
                             const SizedBox(height: 8),
-                            const ScoreWidget(),
                           ],
                         ),
                       ],
@@ -197,7 +197,7 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: leftItems.map((pair) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 4),
+                                  padding: const EdgeInsets.symmetric(vertical: 2),
                                   child: Draggable<String>(
                                     data: pair.id,
                                     feedback: _buildDraggableItem(
@@ -225,7 +225,7 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: rightItems.map((pair) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 4),
+                                  padding: const EdgeInsets.symmetric(vertical: 2),
                                   child: DragTarget<String>(
                                     onWillAccept: (data) => data != null && !completedPairs.contains(data),
                                     onAccept: (data) {
@@ -235,7 +235,7 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
                                     },
                                     builder: (context, candidateData, rejectedData) {
                                       return Container(
-                                        height: 80,
+                                        height: 48,
                                         decoration: BoxDecoration(
                                           color: completedPairs.contains(pair.id)
                                               ? Colors.green.withOpacity(0.1)
@@ -256,7 +256,7 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
                                           child: Text(
                                             pair.value,
                                             style: const TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.bold,
                                             ),
                                             textAlign: TextAlign.center,
@@ -275,11 +275,11 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
                   ),
                   Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(8),
                       child: IconButton(
                         icon: const Icon(
                           Icons.home,
-                          size: 40,
+                          size: 32,
                           color: Colors.green,
                         ),
                         onPressed: () {
@@ -306,7 +306,7 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
     bool isGhost = false,
   }) {
     return Container(
-      height: 80,
+      height: 48,
       decoration: BoxDecoration(
         color: isCompleted
             ? Colors.green.withOpacity(0.1)
@@ -339,7 +339,7 @@ class _QuizLevelOneScreenState extends State<QuizLevelOneScreen> {
         child: Center(
           child: Image.asset(
             image,
-            height: 60,
+            height: 36,
             fit: BoxFit.contain,
             errorBuilder: (context, error, stackTrace) {
               return Container(

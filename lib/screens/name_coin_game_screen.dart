@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../globals/score.dart';
-import '../widgets/score_widget.dart';
+import '../widgets/score_with_popup_widget.dart';
 
 class NameCoinGameScreen extends StatefulWidget {
   const NameCoinGameScreen({super.key});
@@ -96,6 +96,7 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
         GlobalScore.addPoints(0.5);
         scoreAwarded = true;
         hasAwardedGlobalScore = true;
+        GlobalScore.updateQuizScore('Name the Coin', 1);
       }
     });
   }
@@ -251,7 +252,7 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
                   },
                 ),
                 const SizedBox(height: 8),
-                const ScoreWidget(),
+                const ScoreWithPopupWidget(),
                 const SizedBox(height: 8),
                 IconButton(
                   icon: const Icon(

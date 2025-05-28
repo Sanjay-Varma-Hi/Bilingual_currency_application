@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/score_widget.dart';
+import '../widgets/score_with_popup_widget.dart';
 
 class LearnBillsScreen extends StatefulWidget {
   const LearnBillsScreen({super.key});
@@ -107,7 +107,7 @@ class _LearnBillsScreenState extends State<LearnBillsScreen> {
                   },
                 ),
                 const SizedBox(height: 8),
-                const ScoreWidget(),
+                const ScoreWithPopupWidget(),
               ],
             ),
           ),

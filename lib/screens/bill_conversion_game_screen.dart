@@ -296,6 +296,7 @@ class _BillConversionGameScreenState extends State<BillConversionGameScreen> {
               GlobalScore.addPoints(0.5);
               scoreAwarded = true;
               hasAwardedGlobalScore = true;
+              GlobalScore.updateQuizScore('Bill Value Conversion', 1);
             }
           });
         },

@@ -287,6 +287,7 @@ class _ConversionGameScreenState extends State<ConversionGameScreen> {
               GlobalScore.addPoints(0.5);
               scoreAwarded = true;
               hasAwardedGlobalScore = true;
+              GlobalScore.updateQuizScore('Coin Value Conversion', 1);
             }
           });
         },

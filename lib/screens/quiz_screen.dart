@@ -3,7 +3,7 @@ import 'quiz_level_one_screen.dart';
 import 'quiz_level_two_screen.dart';
 import 'quiz_level_three_screen.dart';
 import 'quiz_level_four_screen.dart';
-import '../widgets/score_widget.dart';
+import '../widgets/score_with_popup_widget.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
@@ -74,7 +74,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           },
                         ),
                         const SizedBox(height: 8),
-                        const ScoreWidget(),
+                        const ScoreWithPopupWidget(),
                       ],
                     ),
                   ],

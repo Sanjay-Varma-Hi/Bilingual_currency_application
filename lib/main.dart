@@ -8,7 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'config/firebase_config.dart';
 import 'services/analytics_service.dart';
-import 'widgets/score_widget.dart';
+import 'widgets/score_with_popup_widget.dart';
+import 'globals/score.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +45,8 @@ class CurrencyChampionsHome extends StatefulWidget {
 
 class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
   bool isSpanish = false;
+  bool _showScorePopup = false;
+  final GlobalKey _scoreKey = GlobalKey();
 
   final Map<String, String> translations = {
     'Currency Champions': 'Campeones de la Moneda',
@@ -53,6 +56,20 @@ class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
     'Play with Bills': 'Juega con Billetes',
     'Take Quiz': 'Tomar Prueba',
   };
+
+  void _toggleScorePopup() {
+    setState(() {
+      _showScorePopup = !_showScorePopup;
+    });
+  }
+
+  void _hideScorePopup() {
+    if (_showScorePopup) {
+      setState(() {
+        _showScorePopup = false;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -70,152 +87,163 @@ class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
     final Size screenSize = MediaQuery.of(context).size;
     final bool isTablet = screenSize.width > 600;
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            color: Colors.white,
-            child: SafeArea(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  Text(
-                    translate('Currency Champions'),
-                    style: const TextStyle(
-                      fontSize: 40,
-                      fontFamily: 'serif',
-                      color: Color(0xFFB54B3C),
-                      fontWeight: FontWeight.bold,
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: _hideScorePopup,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(
+              color: Colors.white,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 40),
+                    Text(
+                      translate('Currency Champions'),
+                      style: const TextStyle(
+                        fontSize: 40,
+                        fontFamily: 'serif',
+                        color: Color(0xFFB54B3C),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 40),
-                  Expanded(
-                    child: Center(
-                      child: SizedBox(
-                        width: isTablet ? 600 : screenSize.width * 0.9,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildMenuButton(
-                                    translate('Learn about Coins'),
-                                    Colors.lightGreen[100]!,
-                                    () {
-                                      AnalyticsService.logButtonClick('LearnCoins');
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const LearnCoinsScreen()),
-                                      );
-                                    },
-                                  ),
-                                  _buildMenuButton(
-                                    translate('Learn about Bills'),
-                                    Colors.lightGreen[100]!,
-                                    () {
-                                      AnalyticsService.logButtonClick('LearnBills');
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const LearnBillsScreen()),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildMenuButton(
-                                    translate('Play with Coins'),
-                                    Colors.lightGreen[100]!,
-                                    () {
-                                      AnalyticsService.logButtonClick('PlayCoins');
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const PlayCoinsScreen()),
-                                      );
-                                    },
-                                  ),
-                                  _buildMenuButton(
-                                    translate('Play with Bills'),
-                                    Colors.lightGreen[100]!,
-                                    () {
-                                      AnalyticsService.logButtonClick('PlayBills');
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => const PlayBillsScreen()),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              _buildMenuButton(
-                                translate('Take Quiz'),
-                                const Color(0xFFE6C5B9),
-                                () {
-                                  AnalyticsService.logButtonClick('TakeQuiz');
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const QuizScreen()),
-                                  );
-                                },
-                                width: 200,
-                              ),
-                              const SizedBox(height: 40),
-                              SizedBox(
-                                height: 250,
-                                width: double.infinity,
-                                child: Image.asset(
-                                  'assets/home1.png',
-                                  fit: BoxFit.contain,
-                                  scale: 0.8,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Icon(
-                                      Icons.image,
-                                      size: 50,
-                                      color: Colors.grey,
+                    const SizedBox(height: 40),
+                    Expanded(
+                      child: Center(
+                        child: SizedBox(
+                          width: isTablet ? 600 : screenSize.width * 0.9,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    _buildMenuButton(
+                                      translate('Learn about Coins'),
+                                      Colors.lightGreen[100]!,
+                                      () {
+                                        AnalyticsService.logButtonClick('LearnCoins');
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const LearnCoinsScreen()),
+                                        );
+                                      },
+                                    ),
+                                    _buildMenuButton(
+                                      translate('Learn about Bills'),
+                                      Colors.lightGreen[100]!,
+                                      () {
+                                        AnalyticsService.logButtonClick('LearnBills');
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const LearnBillsScreen()),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    _buildMenuButton(
+                                      translate('Play with Coins'),
+                                      Colors.lightGreen[100]!,
+                                      () {
+                                        AnalyticsService.logButtonClick('PlayCoins');
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const PlayCoinsScreen()),
+                                        );
+                                      },
+                                    ),
+                                    _buildMenuButton(
+                                      translate('Play with Bills'),
+                                      Colors.lightGreen[100]!,
+                                      () {
+                                        AnalyticsService.logButtonClick('PlayBills');
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const PlayBillsScreen()),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                _buildMenuButton(
+                                  translate('Take Quiz'),
+                                  const Color(0xFFE6C5B9),
+                                  () {
+                                    AnalyticsService.logButtonClick('TakeQuiz');
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => const QuizScreen()),
                                     );
                                   },
+                                  width: 200,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 40),
+                                SizedBox(
+                                  height: 250,
+                                  width: double.infinity,
+                                  child: Image.asset(
+                                    'assets/home1.png',
+                                    fit: BoxFit.contain,
+                                    scale: 0.8,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Icon(
+                                        Icons.image,
+                                        size: 50,
+                                        color: Colors.grey,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              top: 40,
+              right: 16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.translate,
+                      size: 30,
+                      color: Colors.black87,
+                    ),
+                    onPressed: () {
+                      AnalyticsService.logButtonClick('Translate');
+                      setState(() {
+                        isSpanish = !isSpanish;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  GestureDetector(
+                    key: _scoreKey,
+                    onTap: () {
+                      _toggleScorePopup();
+                    },
+                    child: const ScoreWithPopupWidget(),
                   ),
                 ],
               ),
             ),
-          ),
-          Positioned(
-            top: 40,
-            right: 16,
-            child: Column(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.translate,
-                    size: 30,
-                    color: Colors.black87,
-                  ),
-                  onPressed: () {
-                    AnalyticsService.logButtonClick('Translate');
-                    setState(() {
-                      isSpanish = !isSpanish;
-                    });
-                  },
-                ),
-                const SizedBox(height: 8),
-                const ScoreWidget(),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

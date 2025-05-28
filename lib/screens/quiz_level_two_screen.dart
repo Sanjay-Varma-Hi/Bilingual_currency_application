@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/score_widget.dart';
+import '../widgets/score_with_popup_widget.dart';
 import '../globals/score.dart';
 import 'quiz_level_three_screen.dart';
 
@@ -95,6 +95,8 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
         scoreAwarded = true;
         hasAwardedGlobalScore = true;
       }
+      // Update Level 2 score in the popup
+      GlobalScore.updateQuizScore('Level 2', score);
     });
   }
 
@@ -161,7 +163,6 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
                               },
                             ),
                             const SizedBox(height: 8),
-                            const ScoreWidget(),
                           ],
                         ),
                       ],

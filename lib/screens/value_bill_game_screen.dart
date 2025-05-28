@@ -270,6 +270,7 @@ class _ValueBillGameScreenState extends State<ValueBillGameScreen> {
               GlobalScore.addPoints(0.5);
               scoreAwarded = true;
               hasAwardedGlobalScore = true;
+              GlobalScore.updateQuizScore('Value of the Bill', 1);
             }
           });
         },

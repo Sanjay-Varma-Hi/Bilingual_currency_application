@@ -93,6 +93,7 @@ class _QuizLevelFourScreenState extends State<QuizLevelFourScreen> {
           GlobalScore.addPoints(0.5);
           scoreAwarded = true;
           hasAwardedGlobalScore = true;
+          GlobalScore.updateQuizScore('Level 4', score);
         }
       }
     });

@@ -268,6 +268,7 @@ class _ValueCoinGameScreenState extends State<ValueCoinGameScreen> {
               GlobalScore.addPoints(0.5);
               scoreAwarded = true;
               hasAwardedGlobalScore = true;
+              GlobalScore.updateQuizScore('Value of the Coin', 1);
             }
           });
         },
