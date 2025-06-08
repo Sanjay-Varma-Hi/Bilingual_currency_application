@@ -265,11 +265,9 @@ class _NameBillGameScreenState extends State<NameBillGameScreen> {
             // If last question and all correct, award score (only once per session)
             if (currentQuestion == questions.length &&
                 answeredCorrectly.every((v) => v) &&
-                !scoreAwarded &&
-                !hasAwardedGlobalScore) {
+                !GlobalScore.hasBeenAwarded('Name the Bill')) {
               GlobalScore.addPoints(0.5);
-              scoreAwarded = true;
-              hasAwardedGlobalScore = true;
+              GlobalScore.markAsAwarded('Name the Bill');
               GlobalScore.updateQuizScore('Name the Bill', 1);
             }
           });

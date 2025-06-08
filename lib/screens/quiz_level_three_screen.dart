@@ -259,6 +259,19 @@ class _QuizLevelThreeScreenState extends State<QuizLevelThreeScreen> {
                     ),
                   ),
                 ],
+                const SizedBox(height: 20),
+                Center(
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.home,
+                      size: 40,
+                      color: Colors.green,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
               ],
             ),
           ),

@@ -32,38 +32,58 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
     'Your score': 'Tu puntaje',
     'Try Again': 'Intentar de nuevo',
     'Next Level': 'Siguiente Nivel',
+    'How many pennies make a nickel?': '¿Cuántos centavos hacen un níquel?',
+    'How many nickels make a quarter?': '¿Cuántos níqueles hacen un cuarto?',
+    'How many dimes make a dollar?': '¿Cuántos diez centavos hacen un dólar?',
+    'How many quarters make a dollar?': '¿Cuántos cuartos hacen un dólar?',
+    'How many pennies make a dollar?': '¿Cuántos centavos hacen un dólar?',
+    '5 pennies': '5 centavos',
+    '10 pennies': '10 centavos',
+    '3 pennies': '3 centavos',
+    '7 pennies': '7 centavos',
+    '4 nickels': '4 níqueles',
+    '5 nickels': '5 níqueles',
+    '3 nickels': '3 níqueles',
+    '6 nickels': '6 níqueles',
+    '8 dimes': '8 diez centavos',
+    '10 dimes': '10 diez centavos',
+    '12 dimes': '12 diez centavos',
+    '15 dimes': '15 diez centavos',
+    '3 quarters': '3 cuartos',
+    '4 quarters': '4 cuartos',
+    '5 quarters': '5 cuartos',
+    '6 quarters': '6 cuartos',
+    '90 pennies': '90 centavos',
+    '100 pennies': '100 centavos',
+    '80 pennies': '80 centavos',
+    '110 pennies': '110 centavos',
   };
 
   final List<QuizQuestion> questions = [
     QuizQuestion(
-      question: 'How many apples can you buy with a \$10 bill if each apple costs \$1?',
-      options: ['5 Apples', '10 Apples', '15 Apples', '2 Apples'],
-      correctAnswer: '10 Apples',
+      question: 'How many pennies make a nickel?',
+      options: ['5 pennies', '10 pennies', '3 pennies', '7 pennies'],
+      correctAnswer: '5 pennies',
     ),
     QuizQuestion(
-      question: 'If you have \$20 and each toy costs \$4, how many toys can you buy?',
-      options: ['2 Toys', '4 Toys', '5 Toys', '6 Toys'],
-      correctAnswer: '5 Toys',
+      question: 'How many nickels make a quarter?',
+      options: ['4 nickels', '5 nickels', '3 nickels', '6 nickels'],
+      correctAnswer: '5 nickels',
     ),
     QuizQuestion(
-      question: 'Sally has a \$50 bill. She wants to buy books that cost \$7 each. How many books can she buy?',
-      options: ['6 Books', '7 Books', '8 Books', '9 Books'],
-      correctAnswer: '7 Books',
+      question: 'How many dimes make a dollar?',
+      options: ['8 dimes', '10 dimes', '12 dimes', '15 dimes'],
+      correctAnswer: '10 dimes',
     ),
     QuizQuestion(
-      question: 'John has \$15. If he buys 2 candies that cost \$2 each, how much money will he have left?',
-      options: ['10', '11', '12', '13'],
-      correctAnswer: '11',
+      question: 'How many quarters make a dollar?',
+      options: ['3 quarters', '4 quarters', '5 quarters', '6 quarters'],
+      correctAnswer: '4 quarters',
     ),
     QuizQuestion(
-      question: 'A pencil costs \$3. How many pencils can you buy with \$18?',
-      options: ['4 Pencils', '5 Pencils', '6 Pencils', '7 Pencils'],
-      correctAnswer: '6 Pencils',
-    ),
-    QuizQuestion(
-      question: 'If a scoop of ice cream costs \$2, how many scoops can you buy with a \$10 bill?',
-      options: ['3 Scoops', '4 Scoops', '5 Scoops', '6 Scoops'],
-      correctAnswer: '5 Scoops',
+      question: 'How many pennies make a dollar?',
+      options: ['90 pennies', '100 pennies', '80 pennies', '110 pennies'],
+      correctAnswer: '100 pennies',
     ),
   ];
 
@@ -193,7 +213,7 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            currentQuestion.question,
+                            translate(currentQuestion.question),
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -268,7 +288,7 @@ class _QuizLevelTwoScreenState extends State<QuizLevelTwoScreen> {
                                       ),
                                       const SizedBox(width: 12),
                                       Text(
-                                        option,
+                                        translate(option),
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: isSelected ? borderColor : Colors.black87,

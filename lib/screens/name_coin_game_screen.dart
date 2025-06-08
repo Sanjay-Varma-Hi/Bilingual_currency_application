@@ -91,11 +91,9 @@ class _NameCoinGameScreenState extends State<NameCoinGameScreen> {
       // If last question and all correct, award score (only once per session)
       if (currentQuestion == questions.length &&
           answeredCorrectly.every((v) => v) &&
-          !scoreAwarded &&
-          !hasAwardedGlobalScore) {
+          !GlobalScore.hasBeenAwarded('Name the Coin')) {
         GlobalScore.addPoints(0.5);
-        scoreAwarded = true;
-        hasAwardedGlobalScore = true;
+        GlobalScore.markAsAwarded('Name the Coin');
         GlobalScore.updateQuizScore('Name the Coin', 1);
       }
     });

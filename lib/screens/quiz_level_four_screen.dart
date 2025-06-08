@@ -129,90 +129,132 @@ class _QuizLevelFourScreenState extends State<QuizLevelFourScreen> {
   }
 
   Widget _buildQuestionScreen() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(
-            'Score: $score',
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 20),
-          Card(
-            elevation: 4,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Text(
-                    getQuestion(),
-                    style: const TextStyle(fontSize: 18),
-                    textAlign: TextAlign.center,
+    return Column(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'Score: $score',
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                Card(
+                  elevation: 4,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          getQuestion(),
+                          style: const TextStyle(fontSize: 18),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        Image.asset(
+                          problems[currentQuestionIndex]['image'],
+                          height: 100,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(Icons.image_not_supported, size: 100);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 20),
-                  Image.asset(
-                    problems[currentQuestionIndex]['image'],
-                    height: 100,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.image_not_supported, size: 100);
-                    },
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 20),
+                ...problems[currentQuestionIndex]['options'].map<Widget>((option) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(16),
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                      ),
+                      onPressed: () => checkAnswer(option),
+                      child: Text('\$$option'),
+                    ),
+                  );
+                }).toList(),
+              ],
             ),
           ),
-          const SizedBox(height: 20),
-          ...problems[currentQuestionIndex]['options'].map<Widget>((option) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                ),
-                onPressed: () => checkAnswer(option),
-                child: Text('\$$option'),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: IconButton(
+              icon: const Icon(
+                Icons.home,
+                size: 40,
+                color: Colors.green,
               ),
-            );
-          }).toList(),
-        ],
-      ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildResultScreen() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            translate('Your Score'),
-            style: const TextStyle(fontSize: 24),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            '$score/${problems.length * 10}',
-            style: const TextStyle(
-              fontSize: 48,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
+    return Column(
+      children: [
+        Expanded(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  translate('Your Score'),
+                  style: const TextStyle(fontSize: 24),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  '$score/${problems.length * 10}',
+                  style: const TextStyle(
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                ElevatedButton(
+                  onPressed: resetQuiz,
+                  child: Text(translate('Try Again')),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(translate('Back to Quiz')),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 40),
-          ElevatedButton(
-            onPressed: resetQuiz,
-            child: Text(translate('Try Again')),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: IconButton(
+              icon: const Icon(
+                Icons.home,
+                size: 40,
+                color: Colors.green,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(translate('Back to Quiz')),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 } 

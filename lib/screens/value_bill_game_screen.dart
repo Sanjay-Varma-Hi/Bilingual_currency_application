@@ -265,11 +265,9 @@ class _ValueBillGameScreenState extends State<ValueBillGameScreen> {
             // If last question and all correct, award score (only once per session)
             if (currentQuestion == questions.length &&
                 answeredCorrectly.every((v) => v) &&
-                !scoreAwarded &&
-                !hasAwardedGlobalScore) {
+                !GlobalScore.hasBeenAwarded('Value of the Bill')) {
               GlobalScore.addPoints(0.5);
-              scoreAwarded = true;
-              hasAwardedGlobalScore = true;
+              GlobalScore.markAsAwarded('Value of the Bill');
               GlobalScore.updateQuizScore('Value of the Bill', 1);
             }
           });

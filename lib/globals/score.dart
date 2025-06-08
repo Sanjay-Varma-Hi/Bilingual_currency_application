@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class GlobalScore {
   static final ValueNotifier<double> currentScore = ValueNotifier<double>(0.0);
   static const double maxScore = 5.0;
+  static final Set<String> awardedScores = {};
 
   // Per-quiz scores
   static final ValueNotifier<Map<String, int>> quizScores = ValueNotifier<Map<String, int>>({
@@ -24,6 +25,7 @@ class GlobalScore {
 
   static void resetScore() {
     currentScore.value = 0.0;
+    awardedScores.clear();
   }
 
   static String getFormattedScore() {
@@ -40,5 +42,16 @@ class GlobalScore {
   // Reset all quiz scores
   static void resetAllQuizScores() {
     quizScores.value = quizScores.value.map((k, v) => MapEntry(k, 0));
+    awardedScores.clear();
+  }
+
+  // Check if a score has been awarded
+  static bool hasBeenAwarded(String quizName) {
+    return awardedScores.contains(quizName);
+  }
+
+  // Mark a score as awarded
+  static void markAsAwarded(String quizName) {
+    awardedScores.add(quizName);
   }
 } 

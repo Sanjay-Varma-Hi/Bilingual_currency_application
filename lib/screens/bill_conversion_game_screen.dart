@@ -291,11 +291,9 @@ class _BillConversionGameScreenState extends State<BillConversionGameScreen> {
             // If last question and all correct, award score (only once per session)
             if (currentQuestion == questions.length &&
                 answeredCorrectly.every((v) => v) &&
-                !scoreAwarded &&
-                !hasAwardedGlobalScore) {
+                !GlobalScore.hasBeenAwarded('Bill Value Conversion')) {
               GlobalScore.addPoints(0.5);
-              scoreAwarded = true;
-              hasAwardedGlobalScore = true;
+              GlobalScore.markAsAwarded('Bill Value Conversion');
               GlobalScore.updateQuizScore('Bill Value Conversion', 1);
             }
           });

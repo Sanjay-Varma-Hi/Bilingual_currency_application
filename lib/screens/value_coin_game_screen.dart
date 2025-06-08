@@ -263,11 +263,9 @@ class _ValueCoinGameScreenState extends State<ValueCoinGameScreen> {
             // If last question and all correct, award score (only once per session)
             if (currentQuestion == questions.length &&
                 answeredCorrectly.every((v) => v) &&
-                !scoreAwarded &&
-                !hasAwardedGlobalScore) {
+                !GlobalScore.hasBeenAwarded('Value of the Coin')) {
               GlobalScore.addPoints(0.5);
-              scoreAwarded = true;
-              hasAwardedGlobalScore = true;
+              GlobalScore.markAsAwarded('Value of the Coin');
               GlobalScore.updateQuizScore('Value of the Coin', 1);
             }
           });

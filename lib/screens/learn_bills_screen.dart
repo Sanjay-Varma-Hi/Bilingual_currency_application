@@ -50,7 +50,7 @@ class _LearnBillsScreenState extends State<LearnBillsScreen> {
                   const SizedBox(height: 40),
                   Text(
                     translate('Learn about Bills'),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFB54B3C),

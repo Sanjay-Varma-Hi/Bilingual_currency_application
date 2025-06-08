@@ -114,8 +114,8 @@ class _CurrencyChampionsHomeState extends State<CurrencyChampionsHome> {
                         child: SizedBox(
                           width: isTablet ? 600 : screenSize.width * 0.9,
                           child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
